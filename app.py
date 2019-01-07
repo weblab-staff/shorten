@@ -10,7 +10,7 @@ try:
 	c.execute('SELECT * FROM urls')
 except sqlite3.OperationalError as e:
 	print('Creating new table')
-	c.execute('CREATE TABLE urls(short TEXT, full TEXT)')
+	c.execute('CREATE TABLE urls(short TEXT UNIQUE, full TEXT)')
 	conn.commit()
 conn.close()
 
@@ -26,10 +26,9 @@ def go(short):
 	with sqlite3.connect('urls.db') as conn:
 		c = conn.cursor()
 		c.execute("SELECT full FROM urls WHERE short=?", [short])
-		full = c.fetchone()[0]
-		print(full)
+		full = c.fetchone()
 		if full:
-			return redirect(full)
+			return redirect(full[0])
 	abort(404)
 
 @app.route("/add", methods=['POST'])
@@ -38,7 +37,7 @@ def add():
 	short = request.form['short']
 	with sqlite3.connect('urls.db') as conn:
 		c = conn.cursor()
-		c.execute("INSERT into URLS values (?,?)", [short, full])
+		c.execute("INSERT OR REPLACE into URLS values (?,?)", [short, full])
 		conn.commit()
 
 	return redirect("/")
