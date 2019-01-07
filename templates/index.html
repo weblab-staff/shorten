@@ -1,0 +1,33 @@
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+
+<table>
+  <thead>
+    <tr>
+        <td>Short Link</td>
+        <td>Full Link</td>
+    </tr>
+  </thead>
+  {% for url in urls %}
+	<tr>
+    <td>{{ url[0] }}</td>
+    <td>{{ url[1] }}</td>
+  </tr>
+  {% endfor %}
+
+<table>
+<br>
+
+<h2>Add New</h2>
+<form action="/add" method="post">
+  Short link: <br>
+  <input type="text" name="short" value="">
+  <br>
+  Full link: <br>
+  <input type="text" name="full" value="">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
