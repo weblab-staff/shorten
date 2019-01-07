@@ -1,7 +1,13 @@
 from gevent.pywsgi import WSGIServer
 from flask import Flask, redirect, abort, request, render_template
+from flask_basicauth import BasicAuth
 import sqlite3
+import os
+
 app = Flask(__name__)
+app.config['BASIC_AUTH_USERNAME'] = 'admin'
+app.config['BASIC_AUTH_PASSWORD'] = os.environ['PASSWORD']
+basic_auth = BasicAuth(app)
 
 # DB init
 conn = sqlite3.connect('urls.db')
@@ -15,6 +21,7 @@ except sqlite3.OperationalError as e:
 conn.close()
 
 @app.route("/")
+@basic_auth.required
 def hello():
     with sqlite3.connect('urls.db') as conn:
         c = conn.cursor()
