@@ -22,7 +22,7 @@ conn.close()
 
 @app.route("/")
 @basic_auth.required
-def hello():
+def home():
     with sqlite3.connect('urls.db') as conn:
         c = conn.cursor()
         c.execute("SELECT * FROM urls")
@@ -38,7 +38,8 @@ def go(short):
             return redirect(full[0])
     abort(404)
 
-@app.route("/add", methods=['POST'])
+@app.route("/api/add", methods=['POST'])
+@basic_auth.required
 def add():
     full = request.form['full']
     short = request.form['short']
@@ -48,6 +49,19 @@ def add():
         conn.commit()
 
     return redirect("/")
+
+# would ideally be POST/DELETE request, but using a simple href GET for simplicity
+@app.route("/api/rm")
+@basic_auth.required
+def rm():
+    short = request.args.get('url')
+    with sqlite3.connect('urls.db') as conn:
+        c = conn.cursor()
+        c.execute("DELETE FROM urls WHERE short=?", [short])
+        conn.commit()
+
+    return redirect("/")
+
 
 http_server = WSGIServer(('', 8000), app)
 http_server.serve_forever()

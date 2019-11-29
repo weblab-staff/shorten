@@ -1,33 +1,48 @@
 <style>
-table, th, td {
-  border: 1px solid black;
-}
+  table,
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 3px;
+  }
+
+  thead {
+    font-weight: bold;
+  }
+
+  a {
+    text-decoration: none;
+  }
 </style>
+
+<h2>URL Shortener</h2>
+
+<form action="/api/add" method="post">
+  Short link: <br />
+  <input type="text" name="short" value="" />
+  <br />
+  Full link: <br />
+  <input type="text" name="full" value="" />
+  <br /><br />
+  <input type="submit" value="Submit" />
+</form>
+
+<br />
 
 <table>
   <thead>
     <tr>
-        <td>Short Link</td>
-        <td>Full Link</td>
+      <td>Short Link</td>
+      <td>Full Link</td>
+      <td>Delete</td>
     </tr>
   </thead>
   {% for url in urls %}
   <tr>
     <td>{{ url[0] }}</td>
     <td>{{ url[1] }}</td>
+    <td><a href="/api/rm?url={{url[0]}}">&#10005;</a></td>
   </tr>
   {% endfor %}
-
-<table>
-<br>
-
-<h2>Add or Update</h2>
-<form action="/add" method="post">
-  Short link: <br>
-  <input type="text" name="short" value="">
-  <br>
-  Full link: <br>
-  <input type="text" name="full" value="">
-  <br><br>
-  <input type="submit" value="Submit">
-</form> 
+</table>
