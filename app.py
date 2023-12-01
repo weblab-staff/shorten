@@ -62,6 +62,6 @@ def rm():
 
     return redirect("/")
 
-
-http_server = WSGIServer(('', 8080), app)
+default_port = 7000
+http_server = WSGIServer(('', default_port), app)
 http_server.serve_forever()
