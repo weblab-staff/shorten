@@ -5,6 +5,8 @@ import sqlite3
 import os
 
 app = Flask(__name__)
+# We're currently serving static files through Flask directly. This isn't great,
+# and it'd be nice if we let nginx do it for us.
 app.config['BASIC_AUTH_USERNAME'] = 'admin'
 app.config['BASIC_AUTH_PASSWORD'] = os.environ['PASSWORD']
 basic_auth = BasicAuth(app)
